@@ -2,9 +2,18 @@ import { useState } from "react";
 import "./App.css";
 import TodoItem from "./TodoItem";
 import Input from "./Input";
+import { useEffect } from "react";
 
 function App() {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState(() => {
+    const storedData = localStorage.getItem("data");
+    return storedData ? JSON.parse(storedData) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem("data", JSON.stringify(data));
+  }),
+    [data];
 
   const [todoTitle, setTodoTitle] = useState("");
 
@@ -32,8 +41,9 @@ function App() {
 
   return (
     <div className="mx-auto h-screen w-full max-w-xl">
-      <h1 className="mb-20">To-Do List</h1>
-      <div className="flex w-full flex-col gap-4">
+      <h1 className="">To-Do List</h1>
+      <p className="mt-4 text-sm opacity-20">now supports localStorage</p>
+      <div className="mt-20 flex w-full flex-col gap-4">
         <Input
           handleChange={handleChange}
           handleClick={handleClick}
