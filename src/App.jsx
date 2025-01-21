@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./App.css";
 import TodoItem from "./TodoItem";
+import Input from "./Input";
 
 function App() {
   const [data, setData] = useState([]);
@@ -8,8 +9,8 @@ function App() {
   const [todoTitle, setTodoTitle] = useState("");
 
   function handleClick() {
-    if (todoTitle === "") return;
-    const newTodoItem = { id: data.length, title: todoTitle, done: false };
+    if (todoTitle.trim() === "") return;
+    const newTodoItem = { id: Date.now(), title: todoTitle, done: false };
     setData([...data, newTodoItem]);
   }
 
@@ -18,50 +19,35 @@ function App() {
   }
 
   function toggleDone(id) {
-    let newArray = [...data];
-    if (data[id].done) {
-      newArray[id].done = false;
-    } else {
-      newArray[id].done = true;
-    }
-    setData(newArray);
+    const updatedData = data.map((item) => {
+      return item.id === id ? { ...item, done: !item.done } : item;
+    });
+    setData(updatedData);
   }
 
-  // const inputField = document.getElementById(addTodoItem);
-  // document.body.addEventListener("keydown", (e) => {
-  //   if (e.key === "Enter") {
-  //     setTodoTitle(inputField.value);
-  //     inputField.innerText = "";
-  //   }
-  // });
+  function handleDelete(id) {
+    const updatedData = data.filter((item) => item.id !== id);
+    setData(updatedData);
+  }
 
   return (
-    <div className="">
-      <h1 className="mb-20">ToDo List</h1>
-
-      <div className="flex flex-col gap-4">
-        <div className="flex gap-4">
-          <input
-            onChange={handleChange}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                handleClick();
-                setTodoTitle("");
-                e.target.value = "";
-              }
-            }}
-            className="rounded border p-2"
-            type="text"
-            name="addTodoItem"
-            id="addTodoItem"
-            placeholder="Add something to do..."
-          />
-          <button onClick={handleClick} className="p-2">
-            Add
-          </button>
-        </div>
+    <div className="mx-auto h-screen w-full max-w-xl">
+      <h1 className="mb-20">To-Do List</h1>
+      <div className="flex w-full flex-col gap-4">
+        <Input
+          handleChange={handleChange}
+          handleClick={handleClick}
+          setTodoTitle={setTodoTitle}
+        />
         {data.map(function (obj) {
-          return <TodoItem key={obj.id} obj={obj} toggleDone={toggleDone} />;
+          return (
+            <TodoItem
+              key={obj.id}
+              obj={obj}
+              toggleDone={toggleDone}
+              handleDelete={handleDelete}
+            />
+          );
         })}
       </div>
     </div>
