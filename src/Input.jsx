@@ -1,8 +1,6 @@
-import { MdAdd } from "react-icons/md";
-
 export default function Input({ handleChange, handleClick, setTodoTitle }) {
   return (
-    <div className="mb-4 flex w-full gap-4">
+    <div className="mb-4 flex w-full max-w-[518px] gap-4">
       <input
         onChange={handleChange}
         onKeyDown={(e) => {
@@ -18,8 +16,11 @@ export default function Input({ handleChange, handleClick, setTodoTitle }) {
         id="addTodoItem"
         placeholder="Add something to do..."
       />
-      <button onClick={handleClick} className="ml-auto rounded p-2 px-3">
-        <MdAdd />
+      <button
+        onClick={handleClick}
+        className="ml-auto text-nowrap rounded px-4 text-sm font-bold"
+      >
+        Add Task
       </button>
     </div>
   );
